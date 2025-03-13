@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>  LISTADO  </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Aca esta el listado</h1>
+    <p>Esta es la lista humilde de libros</p><br>
+
+    <ul>
+    {%for libro in mi_lista%}
+    <li> {{libro.nombre}} {{libro.autor}} {{libro.calificacion}} /10 </li>
+    {% endfor %}
+    </ul>
+    <br>
+
+    <form action="{{ url_for('index') }}" method="get">
+        <button type="submit">volver</button>
+    
+    </form>
+</body>
+</html>

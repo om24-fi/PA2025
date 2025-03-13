@@ -8,11 +8,14 @@
 </head>
 <body>
     <h1>Bienvenido a mi biblioteca de libros</h1>
-    <p>Esta es la página de inicio economica</p>
+    <p>Esta es la página de inicio económica</p>
 
     <form action="{{ url_for('agregar') }}" method="get">
         <button type="submit">Ir a agregar un librito</button>
-    </form>
-    
+    </form> <!-- Cerramos el primer formulario aquí -->
+
+    <form action="{{ url_for('listar') }}" method="get">
+        <button type="submit">Ver listita</button>
+    </form> <!-- Cerramos el segundo formulario correctamente -->
 </body>
 </html>
