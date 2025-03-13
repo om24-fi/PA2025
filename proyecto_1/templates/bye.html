@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bye World</title>
+</head>
+<body>
+    {% for usuario in usuarios %}
+        {%if usuario.edad < 30%}
+            <ul>
+                <li>Bye {{ usuario.nombre }}!, tu edad es {{ usuario.edad }}, eres menor de 30 años</li>
+  
+            </ul>
+        {% else %}
+            <ul>
+                <li>Bye {{ usuario.nombre }}!, tu edad es {{ usuario.edad }}</li>            
+            </ul>
+        {% endif %}          
+    {% endfor %}
+</body>
+</html>

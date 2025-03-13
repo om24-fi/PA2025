@@ -1,0 +1,6 @@
+¿Que es un entorno, para que sirve y por que lo usamos?, por que hay que instalarlo y activarlo?:
+Este tipo de entorno te permite instalar módulos de python
+ sin afectar otros entornos aislando la instalación de los módulos del espacio de trabajo.
+ sera para usar java en otro proyecto por ejemplo???
+ -----------------------------------------------------------------------------------------------------------------------
+ 
