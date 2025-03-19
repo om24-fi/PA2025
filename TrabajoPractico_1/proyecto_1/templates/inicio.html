@@ -7,7 +7,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Bienvenido a mi Aplicación Flask</h1>
-    <p>Esta es la página de inicio.</p>
+    <h1>Bienvenido a nuestra TRIVIA DE PELICULAS</h1>
+    <p>Pone tu nombre y cuantas veces queres jugar y PRONTO!!! </p>
+    <p>Te llevaremos a una pagina donde se apareceran de a una las frases de peliculas</p>
+    <p>Deberas seleccionar en cual de las tres peliculas aparece la frase. </p>
+      <p>  NOTA: Debes jugar al menos 3 frases </p>
+
+    
+
+    <form action="{{url_for('index')}}" method="POST">
+        <label for="nombre">Nombre del Usuario:</label><br>
+        <input type="text" id="nombre" name="input_usuario" value=""><br>
+
+        <label for="autor">cantidad de frases:</label><br>
+        <input type="text" id="jugadas" name="input_intentos" value=""><br>
+
+        <br>
+
+        <input type="submit" value="PRONTO!!!">
+    </form>
+    <br>
+  
+    <a href="{{ url_for('scores') }}">
+        <button type="button">SCORES</button>
+    </a>
+    
+
+    </form>
+    <br>
+
+    <form action="{{ url_for('listar') }}" method="get">
+    
+        <button type="submit">Ver listita de peliculas</button>
+    </form> <!-- Cerramos el segundo formulario correctamente -->
 </body>
 </html>

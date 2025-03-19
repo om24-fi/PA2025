@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Trivia de Películas</title>
+</head>
+<body>
+    <h1>¿De qué película es esta frase?</h1>
+    <p>"{{ frase }}"</p>
+    <form action="{{ url_for('verificar') }}" method="post">
+        <input type="hidden" name="usuario" value="{{ usuario }}">
+        <input type="hidden" name="intentos" value="{{ intentos }}">
+        <input type="hidden" name="puntaje" value="{{ puntaje }}">
+        <input type="hidden" name="jugadas" value="{{ jugadas }}">
+        <input type="hidden" name="peliculas" value="{{ ",".join(peliculas) }}">
+        <input type="hidden" name="pelicula_correcta" value="{{ pelicula_correcta }}">
+        {% for pelicula in peliculas %}
+            <button type="submit" name="pelicula" value="{{ pelicula }}">{{ pelicula }}</button>
+        {% endfor %}
+    </form>
+</body>
+</html>
