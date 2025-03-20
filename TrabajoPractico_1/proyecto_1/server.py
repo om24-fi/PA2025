@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-import datetime
 from modules.config import app # Importa la instancia de la aplicación Flask desde modules/config.py
-from modules.modulo1 import obtenerlistadopeliculas, obtener_pregunta # Importa la función para obtener la lista de películas
-from modules.modulo1 import obtenerlistadoscores
-
+from modules.modulo1 import obtenerlistadopeliculas, obtener_pregunta, obtenerlistadoscores
+from datetime import datetime
 import os 
 
 # Definición de rutas y nombres de archivos
@@ -38,6 +36,7 @@ def jugar():
     Si aún hay jugadas disponibles, muestra una pregunta.
     Si no, redirige a la página de resultados.
     """
+
     usuario = request.args.get('usuario') # Obtiene el nombre del usuario de la URL
     intentos = int(request.args.get('intentos')) # Obtiene el número de intentos de la URL
     puntaje = int(request.args.get('puntaje')) # Obtiene el puntaje actual de la URL
@@ -45,21 +44,28 @@ def jugar():
     peliculas = request.args.get('peliculas').split(",") # Obtiene la lista de películas de la URL
 
     if jugadas < intentos: # Si aún hay jugadas disponibles
+
         jugadas += 1 # Incrementa el contador de jugadas
         frase, pelicula_correcta, peliculas_opciones = obtener_pregunta(ARCHIVO, peliculas) # Obtiene una pregunta aleatoria
+        
         # Muestra la página del juego, pasando la información a la plantilla
         return render_template('juego.html', usuario=usuario, intentos=intentos, puntaje=puntaje, jugadas=jugadas, frase=frase, pelicula_correcta=pelicula_correcta, peliculas=peliculas_opciones)
         
-                         
-            
+                        
     else: # Si no hay más jugadas
         # Redirige a la página de resultados, pasando la información a la URL
          
-        RUTA2 = "./data/" # Ruta al directorio donde se encuentran los datos txt en general
-        ARCHIVO2 = RUTA2 + "SCORES.TXT" # Ruta completa para txt con resultados
-        with open(ARCHIVO2, "w", encoding="utf-8") as f: # Abre el archivo para escribirle
-                hora_actual = datetime.datetime.now().strftime("%d/%m/%y %H:%M")
-                f.write(f"{usuario} puntaje {int(puntaje)/int(intentos)*100} - {hora_actual}")
+        ARCHIVO2 = os.path.join(RUTA, "SCORES.txt")
+
+        # Crear el formato del puntaje (aciertos/N)
+        puntaje_formato = f"{puntaje}/{intentos}"
+
+        # Obtener la fecha y hora actual
+        hora_actual = datetime.now().strftime("%d/%m/%y %H:%M")
+
+        # Guardar el resultado en el archivo (modo "a" para agregar)
+        with open(ARCHIVO2, "a", encoding="utf-8") as f:
+            f.write(f"{usuario},{puntaje_formato},{hora_actual}\n")
         
         return redirect(url_for('resultado', usuario=usuario, puntaje=puntaje, intentos=intentos))
 
@@ -72,6 +78,7 @@ def verificar():
     Actualiza el puntaje si la respuesta es correcta.
     Redirige al juego para la siguiente pregunta.
     """
+
     usuario = request.form['usuario'] # Obtiene el nombre del usuario del formulario
     intentos = int(request.form['intentos']) # Obtiene el número de intentos del formulario
     puntaje = int(request.form['puntaje']) # Obtiene el puntaje actual del formulario
@@ -82,6 +89,7 @@ def verificar():
 
     if pelicula_seleccionada == pelicula_correcta: # Si la respuesta es correcta
         puntaje += 1 # Incrementa el puntaje
+
     # Redirige al juego, pasando la información a la URL
     return redirect(url_for('jugar', usuario=usuario, intentos=intentos, puntaje=puntaje, jugadas=jugadas, peliculas=",".join(peliculas)))
 
@@ -92,9 +100,11 @@ def resultado():
     Función que muestra la página de resultados.
     Obtiene el puntaje final y otra información del juego de la URL.
     """
+
     usuario = request.args.get('usuario') # Obtiene el nombre del usuario de la URL
     puntaje = int(request.args.get('puntaje')) # Obtiene el puntaje final de la URL
     intentos = int(request.args.get('intentos')) # Obtiene el número de intentos de la URL
+
     # Muestra la página de resultados, pasando la información a la plantilla
     return render_template('resultado.html', usuario=usuario, puntaje=puntaje, intentos=intentos)
 
@@ -105,7 +115,9 @@ def listar():
     Función que muestra la lista de películas.
     Obtiene la lista de películas del archivo.
     """
+
     listadopeliculas = obtenerlistadopeliculas(ARCHIVO) # Obtiene la lista de películas
+    
     # Muestra la página de la lista de películas, pasando la lista a la plantilla
     return render_template("listar.html", listado=listadopeliculas)
 
@@ -118,6 +130,7 @@ def scores():
 
     listadodescores=obtenerlistadoscores(ARCHIVO2)
     return render_template("scores.html", listado=listadodescores)
+
 # Ejecución de la aplicación
 if __name__ == "__main__":
     app.run(debug=True) # Inicia el servidor Flask en modo de depuración
