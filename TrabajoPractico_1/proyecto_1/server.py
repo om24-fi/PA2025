@@ -2,12 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 import datetime
 from modules.config import app # Importa la instancia de la aplicación Flask desde modules/config.py
 from modules.modulo1 import obtenerlistadopeliculas, obtener_pregunta # Importa la función para obtener la lista de películas
-<<<<<<< HEAD
 from modules.modulo1 import obtenerlistadoscores
-=======
 
 import os 
->>>>>>> 896a25e956eb0c20d539ff67f46867f540275a18
 
 # Definición de rutas y nombres de archivos
 # Obtén la ruta absoluta al directorio del script actual
@@ -116,8 +113,9 @@ def listar():
 @app.route('/scores', methods=['GET', 'POST'])
 def scores():
 #Funcion que muestra el listado historico de resultados, permite su impresion y muestra graficos   
-    RUTA2 = "./data/" # Ruta al directorio donde se encuentran los datos txt en general
-    ARCHIVO2 = RUTA2 + "SCORES.TXT" # Ruta completa para txt con resultados
+    
+    ARCHIVO2 = os.path.join(RUTA, "SCORES.txt")
+
     listadodescores=obtenerlistadoscores(ARCHIVO2)
     return render_template("scores.html", listado=listadodescores)
 # Ejecución de la aplicación
