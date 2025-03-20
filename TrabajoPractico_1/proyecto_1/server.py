@@ -129,7 +129,42 @@ def scores():
     ARCHIVO2 = os.path.join(RUTA, "SCORES.txt")
 
     listadodescores=obtenerlistadoscores(ARCHIVO2)
-    return render_template("scores.html", listado=listadodescores)
+    
+    # Procesar los datos para los gráficos
+    fechas = []
+    aciertos = []
+    desaciertos = []
+    total_aciertos = 0
+    total_desaciertos = 0
+    
+    for resultado in listadodescores:
+        # Extraer los datos de cada resultado
+        usuario = resultado['usuario']
+        puntaje = resultado['puntaje']
+        fecha = resultado['fecha'].strip()  # Eliminar saltos de línea
+
+        acierto_str, intentos_str = puntaje.split("/")
+        acierto = int(acierto_str)
+        intentos = int(intentos_str)
+
+        # Guardar los datos para los gráficos
+        fechas.append(fecha)
+        aciertos.append(acierto)
+        desaciertos.append(intentos - acierto)  # Desaciertos = Intentos - Aciertos
+
+        # Acumular totales
+        total_aciertos += acierto
+        total_desaciertos += (intentos - acierto)
+
+    # Renderizar la plantilla con los datos
+    return render_template("scores.html", 
+                           listado=listadodescores,
+                           fechas=fechas,
+                           aciertos=aciertos,
+                           desaciertos=desaciertos,
+                           total_aciertos=total_aciertos,
+                           total_desaciertos=total_desaciertos)
+
 
 # Ejecución de la aplicación
 if __name__ == "__main__":

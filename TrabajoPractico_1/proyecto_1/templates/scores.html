@@ -29,11 +29,99 @@
         </tbody>
     </table>
 
-    <!-- Botón para volver -->
-    <form action="{{ url_for('index') }}" method="get">
-        <button type="submit">Volver al Inicio</button>
-    </form>
-    
-</body>
+    <!-- Botones -->
+    <div class="botones">
+        <button onclick="mostrarGraficos()">Mostrar Gráficos</button>
+        <a href="{{ url_for('index') }}">
+            <button>Volver al Inicio</button>
+        </a>
+    </div>
 
+    <!-- Gráficos (ocultos inicialmente) -->
+    <div class="graficos" id="graficos" style="display: none;">
+        <div class="grafico">
+            <canvas id="graficoAciertosDesaciertos"></canvas>
+        </div>
+        <div class="grafico">
+            <canvas id="graficoCircular"></canvas>
+        </div>
+    </div>
+
+    <!-- Script para renderizar gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // @ts-nocheck
+        const datos = {
+            fechas: {{ fechas | tojson | safe }},  // Lista de cadenas
+            aciertos: {{ aciertos | tojson | safe }},  // Lista de enteros
+            desaciertos: {{ desaciertos | tojson | safe }},  // Lista de enteros
+            totalAciertos: {{ total_aciertos | tojson | safe }},  // Entero
+            totalDesaciertos: {{ total_desaciertos | tojson | safe }}  // Entero
+        };
+
+        // Función para mostrar los gráficos
+        function mostrarGraficos() {
+            // Mostrar la sección de gráficos
+            document.getElementById('graficos').style.display = 'flex';
+            
+            // Gráfico de aciertos y desaciertos en función de las fechas
+            const ctx1 = document.getElementById('graficoAciertosDesaciertos').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: datos.fechas,  // Usar fechas como cadenas
+                    datasets: [
+                        {
+                            label: 'Aciertos',
+                            data: datos.aciertos,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            fill: false
+                        },
+                        {
+                            label: 'Desaciertos',
+                            data: datos.desaciertos,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Cantidad'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico circular de aciertos y desaciertos acumulados
+            const ctx2 = document.getElementById('graficoCircular').getContext('2d');
+            new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: ['Aciertos', 'Desaciertos'],
+                    datasets: [{
+                        data: [datos.totalAciertos, datos.totalDesaciertos],
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+    </script>
+</body>
 </html>
