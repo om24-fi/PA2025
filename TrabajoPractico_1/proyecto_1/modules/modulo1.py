@@ -18,11 +18,30 @@ def obtenerlistadopeliculas(ARCHIVO):
     return sorted(listadopeliculas)
 
 def obtenerlistadoscores(ARCHIVO2):
-     with open(ARCHIVO2, "r", encoding="utf-8") as archi2:
-        lineas=archi2.readlines()
-        lineas = [linea.strip() for linea in lineas]
-        
-     return lineas
+    """
+    Lee los resultados desde el archivo SCORES.txt y los devuelve como una lista de diccionarios.
+    Cada diccionario contiene las claves: 'usuario', 'puntaje' y 'fecha'.
+    """
+    resultados = []
+    
+    try:
+        with open(ARCHIVO2, "r", encoding="utf-8") as archi2:
+            lineas = archi2.readlines()
+            
+            for linea in lineas:
+                if linea:  # Ignorar líneas vacías
+                    usuario, puntaje, fecha = linea.split(",")  # Dividir por comas
+                    resultados.append({
+                        "usuario": usuario,
+                        "puntaje": puntaje,
+                        "fecha": fecha
+                    })
+    except FileNotFoundError:
+        # Si el archivo no existe, devolver una lista vacía
+        pass
+    
+    return resultados
+    
     
 # Función para obtener una pregunta aleatoria
 def obtener_pregunta(archivo, lista_peliculas):

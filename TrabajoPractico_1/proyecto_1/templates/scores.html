@@ -7,19 +7,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Aca esta el listado de JUGADAS</h1>
-    <br>
+    <h1>Resultados Históricos</h1>
 
-    <ul>
-    {%for resultado in listado%}
-    <li> {{resultado}} </li>
-    {% endfor %}
-    </ul>
-    <br>
+    <!-- Tabla de resultados -->
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Puntaje</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado in listado %}
+            <tr>
+                <td>{{ resultado.usuario }}</td>
+                <td>{{ resultado.puntaje }}</td>
+                <td>{{ resultado.fecha }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
+    <!-- Botón para volver -->
     <form action="{{ url_for('index') }}" method="get">
-        <button type="submit">volver</button>
-    
+        <button type="submit">Volver al Inicio</button>
     </form>
+    
 </body>
+
 </html>
