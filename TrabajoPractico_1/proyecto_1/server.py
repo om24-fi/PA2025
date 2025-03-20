@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
+import datetime
 from modules.config import app # Importa la instancia de la aplicación Flask desde modules/config.py
 from modules.modulo1 import obtenerlistadopeliculas, obtener_pregunta # Importa la función para obtener la lista de películas
-
+from modules.modulo1 import obtenerlistadoscores
 
 # Definición de rutas y nombres de archivos
 RUTA = "./data/" # Ruta al directorio donde se encuentran los datos
@@ -43,8 +44,18 @@ def jugar():
         frase, pelicula_correcta, peliculas_opciones = obtener_pregunta(ARCHIVO, peliculas) # Obtiene una pregunta aleatoria
         # Muestra la página del juego, pasando la información a la plantilla
         return render_template('juego.html', usuario=usuario, intentos=intentos, puntaje=puntaje, jugadas=jugadas, frase=frase, pelicula_correcta=pelicula_correcta, peliculas=peliculas_opciones)
+        
+                         
+            
     else: # Si no hay más jugadas
         # Redirige a la página de resultados, pasando la información a la URL
+         
+        RUTA2 = "./data/" # Ruta al directorio donde se encuentran los datos txt en general
+        ARCHIVO2 = RUTA2 + "SCORES.TXT" # Ruta completa para txt con resultados
+        with open(ARCHIVO2, "w", encoding="utf-8") as f: # Abre el archivo para escribirle
+                hora_actual = datetime.datetime.now().strftime("%d/%m/%y %H:%M")
+                f.write(f"{usuario} puntaje {int(puntaje)/int(intentos)*100} - {hora_actual}")
+        
         return redirect(url_for('resultado', usuario=usuario, puntaje=puntaje, intentos=intentos))
 
 # Ruta para verificar la respuesta ('/verificar')
@@ -96,7 +107,11 @@ def listar():
 
 @app.route('/scores', methods=['GET', 'POST'])
 def scores():
-    return render_template('scores.html')
+#Funcion que muestra el listado historico de resultados, permite su impresion y muestra graficos   
+    RUTA2 = "./data/" # Ruta al directorio donde se encuentran los datos txt en general
+    ARCHIVO2 = RUTA2 + "SCORES.TXT" # Ruta completa para txt con resultados
+    listadodescores=obtenerlistadoscores(ARCHIVO2)
+    return render_template("scores.html", listado=listadodescores)
 # Ejecución de la aplicación
 if __name__ == "__main__":
     app.run(debug=True) # Inicia el servidor Flask en modo de depuración

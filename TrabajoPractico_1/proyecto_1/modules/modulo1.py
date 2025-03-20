@@ -17,6 +17,13 @@ def obtenerlistadopeliculas(ARCHIVO):
 
     return sorted(listadopeliculas)
 
+def obtenerlistadoscores(ARCHIVO2):
+     with open(ARCHIVO2, "r", encoding="utf-8") as archi2:
+        lineas=archi2.readlines()
+        lineas = [linea.strip() for linea in lineas]
+        
+     return lineas
+    
 # Función para obtener una pregunta aleatoria
 def obtener_pregunta(archivo, lista_peliculas):
     """
