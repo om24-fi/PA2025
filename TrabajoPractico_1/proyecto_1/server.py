@@ -2,11 +2,19 @@ from flask import Flask, render_template, request, redirect, url_for
 import datetime
 from modules.config import app # Importa la instancia de la aplicación Flask desde modules/config.py
 from modules.modulo1 import obtenerlistadopeliculas, obtener_pregunta # Importa la función para obtener la lista de películas
+<<<<<<< HEAD
 from modules.modulo1 import obtenerlistadoscores
+=======
+
+import os 
+>>>>>>> 896a25e956eb0c20d539ff67f46867f540275a18
 
 # Definición de rutas y nombres de archivos
-RUTA = "./data/" # Ruta al directorio donde se encuentran los datos
-ARCHIVO = RUTA + "frases_de_peliculas.txt" # Ruta completa al archivo de frases de películas
+# Obtén la ruta absoluta al directorio del script actual
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Construye la ruta al archivo de forma dinámica
+RUTA = os.path.join(BASE_DIR, "data")
+ARCHIVO = os.path.join(RUTA, "frases_de_peliculas.txt")
 
 # Ruta principal ('/')
 @app.route('/', methods=['GET', 'POST']) # Define la ruta principal y los métodos permitidos (GET y POST)
